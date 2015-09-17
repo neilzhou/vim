@@ -2,8 +2,15 @@ snippet php
 	<?php
 	${1}
 	?>
+snippet phps
+	<?php
+	${1}
+snippet phpn
+	<?php ${1} ?>${2}
 snippet ec
-	echo "${1:string}"${2};
+	echo "${1:string}"${2};${3}
+snippet phpec
+	<?php echo ${1};${2}?>${3}
 snippet inc
 	include '${1:file}';${2}
 snippet inc1
