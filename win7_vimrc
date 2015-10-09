@@ -1,0 +1,341 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+" --Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" --Plugin 'L9'
+" Git plugin not hosted on GitHub
+" --Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" --Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+" --Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Avoid a name conflict with L9
+" --Plugin 'user/L9', {'name': 'newL9'}
+"  Plugin 'vim-scripts/taglist.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'mattn/emmet-vim'
+"Plugin 'msanders/snipmate.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'powerline/powerline'
+Plugin 'bling/vim-airline'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tpope/vim-surround'
+Plugin 'ervandew/supertab'
+Plugin 'tpope/vim-repeat'
+Plugin 'scrooloose/syntastic'
+Plugin 'vim-scripts/matchit.zip'
+Plugin 'othree/xml.vim'
+Plugin 'vim-php/tagbar-phpctags.vim'
+Plugin 'vim-scripts/LargeFile'
+Plugin 'vim-scripts/TaskList.vim'
+Plugin 'godlygeek/tabular'
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+" =================================SET by neil.zhou========================
+"设定文件编码类型，彻底解决中文编码问题 
+set encoding=utf-8 "vim的内部编码, Vim 内部所有的 buffer、寄存器、脚本中的字符串等，全都使用这个编码.utf-8
+set termencoding=cp936 "Vim 输出到客户终端（Term）的编码类型
+set fileencoding=utf-8 "vim 写入文件时采用的编码类型
+set fileencodings=ucs-bom,utf-8,gbk,cp936,gb18030,big5,latin1 "当我们打开文件的时候，VIM 按顺序使用 fileencodings 中的编码进行尝试解码
+" Also can set as below:
+"let &termencoding=&encoding "这里没有设置encoding=xxx,则会是默认值，与操作系统当前locale相同。
+"set fileencodings=ucs-bom,utf-8,gbk,cp936
+
+"执行 Vim 缺省提供的 .vimrc 文件的示例，包含了打开语法加亮显示等最常用的功能
+source $VIMRUNTIME/vimrc_example.vim
+
+"-----vimrc_example 已经存在:-----
+"打开光标的行列位置显示功能
+"set ruler
+"语法高亮
+"syntax on
+"高亮搜索的关键字
+"set hlsearch
+"自动缩进
+"set autoindent
+"-----vimrc_example END-----
+
+" 设置<leader> 为逗号',', 这样<leader>A 就表示为,A
+let mapleader=","
+set nu "显示行号
+
+"行高亮
+set cursorline
+"列高亮，与函数列表有冲突
+"set cursorcolumn
+
+"搜索忽略大小写
+"set ignorecase
+
+"智能对齐方式
+set smartindent
+"一个tab是4个字符
+set tabstop=4
+"按一次tab前进4个字符
+set softtabstop=4
+"用空格代替tab
+set expandtab
+"缩进的字符个数
+set cindent shiftwidth=4
+set autoindent shiftwidth=4
+
+
+"Settings for vim status format"
+set laststatus=2 "always shows status bar and command bar. default =1
+set statusline=
+set statusline+=%2*%-3.3n%0*\ " buffer number
+set statusline+=%f\ " file name
+set statusline+=%h%1*%m%r%w%0* " flag
+set statusline+=[
+if v:version >= 600
+    set statusline+=%{strlen(&ft)?&ft:'none'}, " filetype
+    set statusline+=%{&fileencoding}, " encoding
+endif
+set statusline+=%{&fileformat}] " file format
+set statusline+=%= " right align
+"set statusline+=%2*0x%-8B\ " current char
+set statusline+=0x%-8B\ " current char
+set statusline+=%-14.(%l,%c%V%)\ %<%P\ [%{strftime(\"%d/%m/%Y\ -\ %H:%M\")}]" offset
+if filereadable(expand("$VIM/vimfiles/plugin/vimbuddy.vim"))
+    set statusline+=\ %{VimBuddy()} " vim buddy
+endif
+"状态行颜色
+"highlight StatusLine guifg=SlateBlue guibg=Yellow
+"highlight StatusLineNC guifg=Gray guibg=White
+
+" 选中状态下 复制
+vnoremap <leader>y "+y
+nnoremap <leader>y "+Y
+"设置快捷键将系统剪贴板内容粘贴至Vim
+nnoremap <Leader>p "+p
+"共享剪贴板  
+set clipboard+=unnamed 
+"自动补全
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {}<ESC>i
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+function! ClosePair(char)
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
+endfunction
+" normal mode 下按Alt+Right（右箭头）展示下一个tab
+:nnoremap <A-Right> :tabn<CR>
+:nnoremap <A-Left> :tabp<CR>
+:nnoremap <C-N> :tabnew<CR>
+
+" 映射全选ctrl+a
+nnoremap <C-A> ggVG$
+inoremap <C-A> <Esc>ggVG$
+inoremap <leader><leader><tab> <space><space><space><space>
+" 保存Ctrl+s
+:nnoremap <C-s> :w<CR>
+:inoremap <C-s> <Esc>:w<CR>a
+"========================END of common settings==================="
+
+"========================Plugin Settings=========================="
+" Settings for taglist
+"let Tlist_Use_Right_Window=1 "让taglist窗口出现在Vim的右边
+"let Tlist_File_Fold_Auto_Close=1 "当同时显示多个文件中的tag时，设置为1，可使taglist只显示当前文件tag，其它文件的tag都被折叠起来。
+"let Tlist_Show_One_File=1 "只显示一个文件中的tag，默认为显示多个
+""let Tlist_Sort_Type='name' "Tag的排序规则，以名字排序。默认是以在文件中出现的顺序排序
+"let Tlist_GainFocus_On_ToggleOpen=1 "Taglist窗口打开时，立刻切换为有焦点状态
+"let Tlist_Exit_OnlyWindow=1 "如果taglist窗口是最后一个窗口，则退出vim
+"let Tlist_WinWidth=32 "设置窗体宽度为32，可以根据自己喜好设置
+"let Tlist_Ctags_Cmd='D:/Program/ctags58/ctags.exe'
+"
+"map <leader>t :TlistToggle<CR> "热键设置，我设置成Leader+t来呼出和关闭Taglist
+
+" settings for Plugin NERDTree
+"autocmd vimenter * NERDTree
+""autocmd StdinReadPre * let s:std_in=1
+""autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"map <F2> :NERDTreeToggle<CR>
+map <F2> :NERDTreeTabsToggle<CR>
+
+
+" settings for Plugin CtrlP configuration
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode='ra'
+"set nearest ancestor that contains custom markers eg. tags. which will be
+"precedure of default root markers like '.git', '.svn' and so on
+let g:ctrlp_root_markers=['tags']
+"Windows
+set wildignore+='*\\tmp\*,*.swp,*.zip,*.exe' 
+"Linux/Mac
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {'dir': '\v[\/]\.(git|hg|svn)$','file': '\v\.(exe|so|dll)$',}
+
+"let g:ctrlp_user_command = 'find %s -type f' " Linux/MAC
+let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d' "Windows
+
+" settings for ack
+let g:ackprg="ack -H --nocolor --nogroup"
+function! Ack(args)
+    let grepprg_bak=&grepprg
+    exec "set grepprg=" . g:ackprg
+    execute "silent! grep " . a:args
+    botright copen
+    let &grepprg=grepprg_bak
+    exec "redraw!"
+endfunction
+
+command! -nargs=* -complete=file Ack call Ack(<q-args>)
+
+
+" 在项目目录中新建一个vimscript
+" 目录，制定tags路径，可以通过下面配置加载vimscript文件。
+"    if getfsize("vimscript")>0
+"        source vimscript
+"    endif
+    " 按下Ctrl+F12 更新tags，当有代码更新的时候。
+    nnoremap <C-F12> :!ctags -R<CR>
+
+"Settings for snipmate
+let g:snips_author = 'Neil.zhou'
+
+"Settings for cscope
+if has("cscope")
+    "    It seems that enable below configuration will cause 'cs add
+    "    cscope.out'
+"    set csprg="D:/Program Files (x86)/Vim/vim74/cscope.exe"
+    set csto=1
+    set cst
+    set nocsverb
+    "add any database in current directory
+    "if filereadable("cscope.out") 
+        "cs add cscope.out
+    "endif
+    set csverb
+    "show results of cscope using quickfix window, which you can type :cw to view quickfix window and Ctrl+^ to view original place of codes
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+    nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+"function! CscopeReset()
+    "exec "!dir /s /b *.php > cscope.files"
+    "exec "!cscope -b"
+    "cs reset
+"endfunction
+    "nnoremap <leader><F5> :call CscopeReset()<CR>
+    let g:CurrentDir = getcwd()
+    let g:CscopeAddString = "cs add " . g:CurrentDir . "\\cscope.out " . g:CurrentDir
+    nnoremap <leader><F5> :!dir /s /b *.php > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
+endif
+
+"Settings for tagbar"
+nnoremap <F3> :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
+
+"Settings for surround php"
+" -(ASCII 45) in php files, if type in normal mode 'yss-' will change text
+"  'print "Hello *world!"' to <?php print "Hello world!" ?>
+autocmd FileType php let b:surround_45 = "<?php \r ?>"
+
+"Settings for syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"settings for tagbar-phpctags"
+""let g:tagbar_phpctags_bin='C:\tools_bin\phpctags'
+let g:tagbar_phpctags_memory_limit = '512M'
+
+"Settings for powerline{
+ set guifont=PowerlineSymbols\ for\ Powerline
+" set nocompatible
+ set t_Co=256
+ let g:Powerline_symbols = 'fancy'
+ "}
+ "
+ "Settings for largefile
+let g:LargeFile = 10
+"Settings for xml.vim
+let g:makeElementSuf = '<Ctrl>;'
+
+"settings for ultisnips"
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+"let g:UltiSnipsSnippetDirectories=['UltiSnips']
+let g:UltiSnipsSnippetsDir = '~\.vim\snips\UltiSnips'
+let g:UltiSnipsExpandTrigger="<leader><tab>"
+"default"
+"let g:UltiSnipsJumpForwardTrigger="<c-j>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+"here we use python3.5"
+let g:UltiSnipsUsePythonVersion = 3
+" If you want :UltiSnipsEdit to split your window. 编辑新的代码片段
+let g:UltiSnipsEditSplit="vertical"
+"set runtimepath for .vim so that ~/.vim/UltiSnips directory can be found in
+"runtimepath when load snips files
+set rtp+=~/.vim
+
+"
+"" If you want :UltiSnipsEdit to split your window.
+"let g:UltiSnipsEditSplit="vertical"
+"let g:SuperTabDefaultCompletionType='<C-Tab>'
+"let g:UltiSnipsSnippetDirectories=['D:\\Users\\sifu.zhou\\.vim\\bundle\\vim-snippets\\UltiSnips']
+
+"settings for supertab"
+"supertab {
+    "let g:SuperTabMappingForward = '<c-n>'
+    "let g:SuperTabMappingBackward = '<c-p>'
+"}
