@@ -366,3 +366,7 @@ let g:UltiSnipsEditSplit="vertical"
 "supertab {
 let g:SuperTabDefaultCompletionType="<C-Tab>"
 "}"
+
+" xml settings {{{ "
+let g:makeElementSuf = '<Ctrl>;'
+" }}} xml settings "
