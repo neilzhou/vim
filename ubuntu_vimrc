@@ -368,6 +368,12 @@ let g:LargeFile = 10
 "Settings for Ultisnips
 "Ultisnips{
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+
+"set runtimepath for .vim so that ~/.vim/UltiSnips directory can be found in
+"runtimepath when load snips files
+set rtp+=~/.vim
+"let g:UltiSnipsSnippetDirectories=['UltiSnips']
+let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
 let g:UltiSnipsExpandTrigger="<leader><tab>"
 "let g:UltiSnipsJumpForwardTrigger="<c-j>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -379,3 +385,7 @@ let g:UltiSnipsEditSplit="vertical"
 "supertab {
 let g:SuperTabDefaultCompletionType="<C-Tab>"
 "}"
+
+" xml settings {{{ "
+let g:makeElementSuf = '<Ctrl>;'
+" }}} xml settings "
