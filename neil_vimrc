@@ -1,0 +1,563 @@
+" An example for a vimrc file.
+"
+" Maintainer:	Bram Moolenaar <Bram@vim.org>
+" Last change:	2011 Apr 15
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"	      for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"	    for OpenVMS:  sys$login:.vimrc
+
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
+endif
+
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+filetype off                  " required
+
+"--------------- Add Vundle Plugin-------------------
+" set the runtime path to include Vundle and initialize
+ set rtp+=~/.vim/bundle/Vundle.vim
+ call vundle#begin()
+ " alternatively, pass a path where Vundle should install plugins
+ "call vundle#begin('~/some/path/here')
+
+ " let Vundle manage Vundle, required
+
+ " The following are examples of different formats supported.
+ " Keep Plugin commands between vundle#begin/end.
+ " plugin on GitHub repo
+" Plugin 'tpope/vim-fugitive'
+ Plugin 'VundleVim/Vundle.vim'
+ Plugin 'vim-scripts/taglist.vim'
+ Plugin 'scrooloose/nerdtree'
+ Plugin 'scrooloose/nerdcommenter'
+ Plugin 'jistr/vim-nerdtree-tabs'
+ Plugin 'kien/ctrlp.vim'
+ Plugin 'mileszs/ack.vim'
+Plugin 'mattn/emmet-vim'
+"Plugin 'msanders/snipmate.vim'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tpope/vim-surround'
+Plugin 'ervandew/supertab'
+Plugin 'tpope/vim-repeat'
+Plugin 'scrooloose/syntastic'
+Plugin 'vim-scripts/matchit.zip'
+Plugin 'powerline/powerline'
+Plugin 'othree/xml.vim'
+Plugin 'bling/vim-airline'
+Plugin 'majutsushi/tagbar'
+Plugin 'vim-php/tagbar-phpctags.vim'
+Plugin 'vim-scripts/TaskList.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-scripts/LargeFile'
+Plugin 'godlygeek/tabular'
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+
+
+"Plugin 'vim-scripts/phpfolding.vim'
+"Plugin 'eshion/vim-sync'
+
+" " plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" " Git plugin not hosted on GitHub
+" Plugin 'git://git.wincent.com/command-t.git'
+" " git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+"Plugin 'file:///home/neilzhou/.vim/bundle/nerdtree'
+"Plugin 'file:///home/neilzhou/.vim/bundle/vim-nerdtree-tabs'
+
+" " The sparkup vim script is in a subdirectory of this repo called vim.
+" " Pass the path to set the runtimepath properly.
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" " Avoid a name conflict with L9
+" Plugin 'user/L9', {'name': 'newL9'}
+
+ " All of your Plugins must be added before the following line
+ call vundle#end()            " required
+ filetype plugin indent on    " required
+ " To ignore plugin indent changes, instead use:
+ "filetype plugin on
+ "
+ " Brief help
+ " :PluginList       - lists configured plugins
+ " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+ " :PluginSearch foo - searches for foo; append `!` to refresh local cache
+ " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+ "
+ " see :h vundle for more details or wiki for FAQ
+ " Put your non-Plugin stuff after this line
+ " ---------------------END of Vundle Plugin Configuration--------------------
+
+" =================================SET by neil.zhou========================
+" Environment {
+
+    " Identify platform {
+        silent function! OSX()
+            return has('macunix')
+        endfunction
+        silent function! LINUX()
+            return has('unix') && !has('macunix') && !has('win32unix')
+        endfunction
+        silent function! WINDOWS()
+            return  (has('win16') || has('win32') || has('win64'))
+        endfunction
+    " }
+
+    " Basics {
+        set nocompatible        " Must be first line
+        if !WINDOWS()
+            set shell=/bin/sh
+        endif
+    " }
+
+    " Windows Compatible {
+        " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
+        " across (heterogeneous) systems easier.
+        "if WINDOWS()
+          "set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+        "endif
+    " }
+    
+    " Arrow Key Fix {
+        " https://github.com/spf13/spf13-vim/issues/780
+        if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
+            inoremap <silent> <C-[>OC <RIGHT>
+        endif
+    " }
+
+" }
+
+if WINDOWS()
+    "设定文件编码类型，彻底解决中文编码问题 
+    set encoding=utf-8 "vim的内部编码, Vim 内部所有的 buffer、寄存器、脚本中的字符串等，全都使用这个编码.utf-8
+    set termencoding=cp936 "Vim 输出到客户终端（Term）的编码类型
+    set fileencoding=utf-8 "vim 写入文件时采用的编码类型
+    set fileencodings=ucs-bom,utf-8,gbk,cp936,gb18030,big5,latin1 "当我们打开文件的时候，VIM 按顺序使用 fileencodings 中的编码进行尝试解码
+    " Also can set as below:
+    "let &termencoding=&encoding "这里没有设置encoding=xxx,则会是默认值，与操作系统当前locale相同。
+    "set fileencodings=ucs-bom,utf-8,gbk,cp936
+else
+    " Neil added:
+    set encoding=utf-8
+    set termencoding=utf-8
+    set fileencoding=utf-8
+    set fileencodings=ucs-bom,utf-8,gbk,cp936,gb18030,big5,default,latin1
+endif
+"=============================================================================================="
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+if has("vms")
+  set nobackup		" do not keep a backup file, use versions instead
+else
+  set nobackup		" keep a backup file
+"  set backup		" keep a backup file
+endif
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+set incsearch		" do incremental searching
+set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+set virtualedit=onemore             " Allow for cursor beyond last character
+set spell                           " Spell checking on
+set iskeyword-=.                    " '.' is an end of word designator
+set iskeyword-=#                    " '#' is an end of word designator
+set iskeyword-=-                    " '-' is an end of word designator
+set mouse=a                 " Automatically enable mouse usage
+set mousehide               " Hide the mouse cursor while typing
+scriptencoding utf-8
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+
+if LINUX()
+    execute pathogen#infect()
+endif
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  " filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent		" always set autoindenting on
+
+endif " has("autocmd")
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4               " Let backspace delete indent
+set splitright                  " Puts new vsplit windows to the right of the current
+set splitbelow                  " Puts new split windows to the bottom of the current
+set nu
+
+if LINUX()
+    colorscheme evening
+endif
+
+set expandtab
+set showmatch
+
+set cursorline
+"--状态行设置--
+set laststatus=2 " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
+
+let mapleader=","
+ " 选中状态下 复制
+vnoremap <leader>y "+y
+nnoremap <leader>y "+yy
+"设置快捷键将系统剪贴板内容粘贴至Vim
+nnoremap <Leader>p "+p
+"共享剪贴板  
+set clipboard+=unnamed 
+"自动补全
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {}<ESC>i
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+function! ClosePair(char)
+  if getline('.')[col('.') - 1] == a:char
+      return "\<Right>"
+  else
+      return a:char
+  endif
+endfunction
+
+"Add rename function to rename file using vim
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <leader>n :call RenameFile()<cr>
+
+" normal mode下按Alt+Right（右箭头）展示下一个tab
+:nnoremap <A-Right> :tabn<CR>
+:nnoremap <A-Left> :tabp<CR>
+:nnoremap <C-N> :tabnew<CR>
+" 保存Ctrl+s
+:nnoremap <C-s> :w<CR>
+:inoremap <C-s> <Esc>:w<CR>a
+" 映射全选ctrl+a
+nnoremap <C-A> ggVG$
+inoremap <C-A> <Esc>ggVG$
+"JSON FORMAT
+noremap <leader>jf <Esc>:%!python -m json.tool<CR>
+"map tab in insert mode to <leader>tab"
+inoremap <leader><leader><tab> <space><space><space><space>
+"========================END of common settings==================="
+
+
+"Settings for NERDTree"
+if isdirectory(expand("~/.vim/bundle/nerdtree"))
+    ""autocmd vimenter * NERDTree "default automatical open NERDTree when open vim
+    "automatical open NERDTree when only vim with no file
+    ""autocmd StdinReadPre * let s:std_in=1
+    ""autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+    map <F2> :NERDTreeToggle<CR>
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+endif
+
+" Settings for taglist
+if isdirectory(expand("~/.vim/bundle/taglist.vim"))
+    "let Tlist_Use_Right_Window=1 "让taglist窗口出现在Vim的右边
+    "let Tlist_File_Fold_Auto_Close=1 "当同时显示多个文件中的tag时，设置为1，可使 taglist只显示当前文件tag，其它文件的tag都被折叠起来。
+    "let Tlist_Show_One_File=1 "只显示一个文件中的tag，默认为显示多个
+    "let Tlist_Sort_Type='name' "Tag的排序规则，以名字排序。默认是以在文件中出现 的顺序排序
+    "let Tlist_GainFocus_On_ToggleOpen=1 "Taglist窗口打开时，立刻切换为有焦点状态
+    "let Tlist_Exit_OnlyWindow=1 "如果taglist窗口是最后一个窗口，则退出vim
+    "let Tlist_WinWidth=32 "设置窗体宽度为32，可以根据自己喜好设置
+    "let Tlist_Ctags_Cmd='/usr/bin/ctags'  " 注意路径不能有空格
+    "
+    "map <leader>t :TlistToggle<CR> "热键设置，我设置成Leader+t来呼出和关闭Taglist 
+endif
+
+" Settings for ag
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+" settings for ctags
+" 在项目目录中新建一个vimscript
+" 目录，制定tags路径，可以通过下面配置加载vimscript文件。
+if executable('ctags')
+"    if getfsize("vimscript")>0
+"        source vimscript
+"    endif
+    " 按下Ctrl+F12 更新tags，当有代码更新的时候。
+    nnoremap <C-F12> :!ctags -R<CR>
+endif
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cscope setting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("cscope")
+"  set csprg=/usr/bin/cscope
+  "set csprg=/usr/bin/cscope
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  endif
+  set csverb
+  let g:CurrentDir = getcwd()
+  
+  if WINDOWS()
+      "for windows
+      let g:CscopeAddString = "cs add " . g:CurrentDir . "\\cscope.out " . g:CurrentDir
+  elseif LINUX()
+      "for linux:
+      let g:CscopeAddString = "cs add " . g:CurrentDir . "/cscope.out " . g:CurrentDir
+  endif
+  
+  nnoremap <leader><F5> :!find . -type f -name "*.php" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
+endif
+
+"show results of cscope using quickfix window, which you can type :cw to view quickfix window and Ctrl+^ to view original place of codes
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR>
+
+"Settings for snipmate
+let g:snips_author = 'Neil.zhou'
+
+"Settigns for syntastic"
+if isdirectory(expand("~/.vim/bundle/syntastic"))
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+endif
+
+"Settings for airline"
+if isdirectory(expand("~/.vim/bundle/vim-airline"))
+    "Automatically displays all buffers when there's only one tab open.
+    ""let g:airline#extensions#tabline#buffer_idx_mode = 1
+    ""let g:airline#extensions#tabline#enabled = 1
+    ""let g:airline#extensions#tabline#left_sep = ' '
+    ""let g:airline#extensions#tabline#left_alt_sep = '|'
+    ""nmap <leader>1 <Plug>AirlineSelectTab1
+    ""nmap <leader>2 <Plug>AirlineSelectTab2
+    ""nmap <leader>3 <Plug>AirlineSelectTab3
+endif
+
+"powerline
+if isdirectory(expand("~/.vim/bundle/powerline"))
+    "let g:airline_powerline_fonts = 1
+    "powerline{
+     set guifont=PowerlineSymbols\ for\ Powerline
+    " set nocompatible
+     set t_Co=256
+     let g:Powerline_symbols = 'fancy'
+     "}
+endif
+
+ "Settings for phpctags
+if executable('phpctags')
+    if LINUX()
+        let g:tagbar_phpctags_bin='/usr/share/php5/phpctags'
+    elseif WINDOWS()
+        "let g:tagbar_phpctags_bin='C:\tools_bin\phpctags'
+    endif
+    "The amount of memory that phpctags can use can be configured as such:
+    let g:tagbar_phpctags_memory_limit = '512M'
+endif 
+
+"Settings for tagbar"
+if isdirectory(expand("~/.vim/bundle/tagbar"))
+    let g:tagbar_autofocus = 1
+    nnoremap <F3> :TagbarToggle<CR>
+endif
+
+"Settings for tasklist
+if isdirectory(expand("~/.vim/bundle/TaskList.vim"))
+    "tasklist{
+    map <leader>td <Plug>TaskList
+    "}
+endif
+
+"Settings for largefile , 默认单位是 MB
+if isdirectory(expand("~/.vim/bundle/LargeFile"))
+    let g:LargeFile = 10
+endif
+
+"Settings for Ultisnips
+if isdirectory(expand("~/.vim/bundle/ultisnips"))
+    "Ultisnips{
+    " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+
+    "set runtimepath for .vim so that ~/.vim/UltiSnips directory can be found in
+    "runtimepath when load snips files
+    set rtp+=~/.vim
+    "let g:UltiSnipsSnippetDirectories=['UltiSnips']
+    let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+    let g:UltiSnipsExpandTrigger="<leader><tab>"
+    "let g:UltiSnipsJumpForwardTrigger="<c-j>"
+    "let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+    
+    if has('python3')
+        "here we use python3.5"
+        let g:UltiSnipsUsePythonVersion = 3
+    endif
+
+    " If you want :UltiSnipsEdit to split your window.
+    let g:UltiSnipsEditSplit="vertical"
+    "}
+endif
+
+if isdirectory(expand("~/.vim/bundle/supertab"))
+    "supertab {
+    let g:SuperTabDefaultCompletionType="<C-Tab>"
+    "}"
+endif
+
+if isdirectory(expand("~/.vim/bundle/xml.vim"))
+    " xml settings {{{ "
+    let g:makeElementSuf = '<Ctrl>;'
+    " }}} xml settings "
+endif
+
+" settings for Plugin CtrlP configuration
+if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
+    let g:ctrlp_map = '<c-p>'
+    let g:ctrlp_cmd = 'CtrlP'
+    let g:ctrlp_working_path_mode='ra'
+    "set nearest ancestor that contains custom markers eg. tags. which will be
+    "precedure of default root markers like '.git', '.svn' and so on
+    let g:ctrlp_root_markers=['tags']
+    
+    if WINDOWS()
+        "Windows
+        set wildignore+='*\\tmp\*,*.swp,*.zip,*.exe' 
+        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d' "Windows
+    else
+        "Linux/Mac
+        set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+        let g:ctrlp_user_command = 'find %s -type f' " Linux/MAC
+    endif
+
+    "let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+    "let g:ctrlp_custom_ignore = {'dir': '\v[\/]\.(git|hg|svn)$','file': '\v\.(exe|so|dll)$',}
+    let g:ctrlp_custom_ignore = {
+                \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+                \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
+endif
+
+" settings for ack
+if executable('ack')
+    if WINDOWS()
+        let g:ackprg="ack -H --nocolor --nogroup"
+        function! Ack(args)
+            let grepprg_bak=&grepprg
+            exec "set grepprg=" . g:ackprg
+            execute "silent! grep " . a:args
+            botright copen
+            let &grepprg=grepprg_bak
+            exec "redraw!"
+        endfunction
+
+        command! -nargs=* -complete=file Ack call Ack(<q-args>)
+    endif
+endif
+
+" Tabularize {
+    if isdirectory(expand("~/.vim/bundle/tabular"))
+        nmap <Leader>a& :Tabularize /&<CR>
+        vmap <Leader>a& :Tabularize /&<CR>
+        nmap <Leader>a= :Tabularize /^[^=]*\zs=<CR>
+        vmap <Leader>a= :Tabularize /^[^=]*\zs=<CR>
+        nmap <Leader>a=> :Tabularize /=><CR>
+        vmap <Leader>a=> :Tabularize /=><CR>
+        nmap <Leader>a: :Tabularize /:<CR>
+        vmap <Leader>a: :Tabularize /:<CR>
+        nmap <Leader>a:: :Tabularize /:\zs<CR>
+        vmap <Leader>a:: :Tabularize /:\zs<CR>
+        nmap <Leader>a, :Tabularize /,<CR>
+        vmap <Leader>a, :Tabularize /,<CR>
+        nmap <Leader>a,, :Tabularize /,\zs<CR>
+        vmap <Leader>a,, :Tabularize /,\zs<CR>
+        nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+        vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+    endif
+" }
