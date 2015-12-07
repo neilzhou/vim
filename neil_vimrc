@@ -375,12 +375,13 @@ if has("cscope")
   if WINDOWS()
       "for windows
       let g:CscopeAddString = "cs add " . g:CurrentDir . "\\cscope.out " . g:CurrentDir
+      nnoremap <leader><F5> :!dir /s /b *.php > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
   elseif LINUX()
       "for linux:
       let g:CscopeAddString = "cs add " . g:CurrentDir . "/cscope.out " . g:CurrentDir
+      nnoremap <leader><F5> :!find . -type f -name "*.php" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
   endif
   
-  nnoremap <leader><F5> :!find . -type f -name "*.php" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
 endif
 
 "show results of cscope using quickfix window, which you can type :cw to view quickfix window and Ctrl+^ to view original place of codes
@@ -436,7 +437,8 @@ endif
  "Settings for phpctags
 if executable('phpctags')
     if LINUX()
-        let g:tagbar_phpctags_bin='/usr/share/php5/phpctags'
+        "let g:tagbar_phpctags_bin='/usr/share/php5/phpctags' " if phpctags placed at php5 folder.
+        let g:tagbar_phpctags_bin='/usr/local/bin/phpctags'
     elseif WINDOWS()
         "let g:tagbar_phpctags_bin='C:\tools_bin\phpctags'
     endif
