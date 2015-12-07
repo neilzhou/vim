@@ -61,6 +61,8 @@ Plugin 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
+Plugin 'vim-scripts/sessionman.vim'
+Plugin 'tacahiroy/ctrlp-funky'
 
 
 "Plugin 'vim-scripts/phpfolding.vim'
@@ -310,8 +312,11 @@ map <leader>n :call RenameFile()<cr>
 " 映射全选ctrl+a
 nnoremap <C-A> ggVG$
 inoremap <C-A> <Esc>ggVG$
-"JSON FORMAT
-noremap <leader>jf <Esc>:%!python -m json.tool<CR>
+"JSON FORMAT {
+    noremap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+    let g:vim_json_syntax_conceal=0
+"}
+
 "map tab in insert mode to <leader>tab"
 inoremap <leader><leader><tab> <space><space><space><space>
 "========================END of common settings==================="
@@ -509,21 +514,52 @@ if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
     "precedure of default root markers like '.git', '.svn' and so on
     let g:ctrlp_root_markers=['tags']
     
-    if WINDOWS()
-        "Windows
-        set wildignore+='*\\tmp\*,*.swp,*.zip,*.exe' 
-        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d' "Windows
-    else
-        "Linux/Mac
-        set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-        let g:ctrlp_user_command = 'find %s -type f' " Linux/MAC
-    endif
+    "if WINDOWS()
+        ""Windows
+        "set wildignore+='*\\tmp\*,*.swp,*.zip,*.exe' 
+        "let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d' "Windows
+    "else
+        ""Linux/Mac
+        "set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+        "let g:ctrlp_user_command = 'find %s -type f' " Linux/MAC
+    "endif
 
     "let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     "let g:ctrlp_custom_ignore = {'dir': '\v[\/]\.(git|hg|svn)$','file': '\v\.(exe|so|dll)$',}
     let g:ctrlp_custom_ignore = {
                 \ 'dir':  '\.git$\|\.hg$\|\.svn$',
                 \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
+
+    if executable('ag')
+        let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+    elseif executable('ack-grep')
+        let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
+    elseif executable('ack')
+        let s:ctrlp_fallback = 'ack %s --nocolor -f'
+    " On Windows use "dir" as fallback command.
+    elseif WINDOWS()
+        let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
+    else
+        let s:ctrlp_fallback = 'find %s -type f'
+    endif
+    if exists("g:ctrlp_user_command")
+        unlet g:ctrlp_user_command
+    endif
+    let g:ctrlp_user_command = {
+        \ 'types': {
+            \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+        \ },
+        \ 'fallback': s:ctrlp_fallback
+    \ }
+
+    if isdirectory(expand("~/.vim/bundle/ctrlp-funky/"))
+        " CtrlP extensions
+        let g:ctrlp_extensions = ['funky']
+
+        "funky
+        nnoremap <Leader>fu :CtrlPFunky<Cr>
+    endif
 endif
 
 " settings for ack
@@ -562,4 +598,13 @@ endif
         nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
         vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
     endif
+" }
+
+" Session List {
+        set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+        if isdirectory(expand("~/.vim/bundle/sessionman.vim/"))
+            nmap <leader>sl :SessionList<CR>
+            nmap <leader>ss :SessionSave<CR>
+            nmap <leader>sc :SessionClose<CR>
+        endif
 " }
