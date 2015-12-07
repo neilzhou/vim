@@ -1,8 +1,10 @@
 #!/bin/bash
-ROOT_UID = 0
-VIM_PATH = "/home/neilzhou/.vim"
+ROOT_UID=0
+VIMPLUGIN_PATH="/home/neilzhou/.vim"
+VIMINSTALL_PATH="/usr/share/vim/vim74"
 
-if ["$UID" -ne "$ROOT_UID"]
+#  www.educity.cn/linux/1575485.html
+if [ `whoami` != "root" ]
 then
   echo "You are not root role, please use sudo command to execute this shell."
   exit 0
@@ -23,9 +25,9 @@ fi
 # check GIT
 # http://justcoding.iteye.com/blog/2010678 ÅÐ¶ÏÃüÁîÊÇ·ñ´æÔÚ
 if command -v git 2>/dev/null
-else
-  echo "GIT installed"
 then
+  echo "GIT installed"
+else
   apt-get install -y php5
 fi
 
@@ -51,18 +53,9 @@ apt-get install -y cscope
 
 # install fencview
 curl -sS http://www.vim.org/scripts/download_script.php?src_id=21657 > fencview.vim
-if [ -f ./fencview.vim 
- cp fencview.vim /usr/share/vim/vim74/plugin/
-then 
-
-# install YCM in Ubuntu x64
-apt-get install -y build-essential cmake python-dev
-# http://www.centoscn.com/shell/2014/1030/4022.html check OS is 32/64 bit 
-if [ $(getconf WORD_BIT) = '32' ] && [ $(getconf LONG_BIT) = '64' ]
+if [ -f ./fencview.vim ]
 then
-  $VIM_PATH/bundle/YouCompleteMe/install.py --clang-completer
-else
-  $VIM_PATH/bundle/YouCompleteMe/install.py
+ cp fencview.vim $VIMINSTALL_PATH/plugin/
 fi
 
 # install powerline fonts
@@ -71,3 +64,17 @@ if [ -x ./fonts/install.sh ]
 then
   ./fonts/install.sh
 fi
+
+# install YCM in Ubuntu x64
+apt-get install -y build-essential cmake python-dev
+cd $VIMPLUGIN_PATH/bundle/YouCompleteMe/
+git submodule update --init --recursive
+# http://www.centoscn.com/shell/2014/1030/4022.html check OS is 32/64 bit 
+if [ $(getconf WORD_BIT) = '32' ] && [ $(getconf LONG_BIT) = '64' ]
+then
+  $VIMPLUGIN_PATH/bundle/YouCompleteMe/install.py --clang-completer
+else
+  $VIMPLUGIN_PATH/bundle/YouCompleteMe/install.py
+fi
+
+exit 1
