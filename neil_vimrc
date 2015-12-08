@@ -443,7 +443,7 @@ endif
 if executable('phpctags')
     if LINUX()
         "let g:tagbar_phpctags_bin='/usr/share/php5/phpctags' " if phpctags placed at php5 folder.
-        let g:tagbar_phpctags_bin='/usr/local/bin/phpctags'
+        "let g:tagbar_phpctags_bin='/usr/local/bin/phpctags'
     elseif WINDOWS()
         "let g:tagbar_phpctags_bin='C:\tools_bin\phpctags'
     endif
