@@ -63,6 +63,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'eshion/vim-sftp-sync'
 
 
 "Plugin 'vim-scripts/phpfolding.vim'
@@ -608,3 +609,35 @@ endif
             nmap <leader>sc :SessionClose<CR>
         endif
 " }
+
+" sftp sync {
+    if isdirectory(expand("~/.vim/bundle/vim-sftp-sync"))
+        "let g:vim_sftp_configs = {
+                    "\      'sample_server_1' : {
+                    "\       'upload_on_save'   : 1,
+                    "\       'download_on_open' : 0,
+                    "\       'confirm_downloads': 1,
+                    "\       'confirm_uploads'  : 0,
+                    "\       'local_base_path'  : '/Users/name/sample/',
+                    "\       'remote_base_path' : '/var/www/sample/',
+                    "\       'sftp_command' : 'ftp',
+                    "\       'user' : 'username',
+                    "\       'pass' : 'password',
+                    "\       'host' : '127.0.0.1'
+                    "\   },
+                    "\   'sample_server_2' : {
+                    "\       'upload_on_save'   : 1,
+                    "\       'download_on_open' : 1,
+                    "\       'confirm_downloads': 0,
+                    "\       'confirm_uploads'  : 0,
+                    "\       'local_base_path'  : '/Users/development',
+                    "\       'remote_base_path' : '/var/www/development/trunk/',
+                    "\       'sftp_command' : 'sftp',
+                    "\       'complete_prompt_regexp' : '100\%',
+                    "\       'user' : 'username',
+                    "\       'pass' : 'password',
+                    "\       'host' : '-P23 user@127.0.0.1'
+                    "\   }
+                    "\}
+    endif
+" }"
