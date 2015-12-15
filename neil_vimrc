@@ -64,6 +64,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'tacahiroy/ctrlp-funky'
 Plugin 'eshion/vim-sftp-sync'
+Plugin 'dyng/ctrlsf.vim'
 
 
 "Plugin 'vim-scripts/phpfolding.vim'
