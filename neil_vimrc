@@ -642,3 +642,16 @@ endif
                     "\}
     endif
 " }"
+
+" dyng/ctrlsf.vim {{{ "
+if isdirectory(expand("~/.vim/bundle/ctrlsf.vim"))
+    nmap     <Leader>f <Plug>CtrlSFPrompt
+    vmap     <Leader>f <Plug>CtrlSFVwordPath
+    vmap     <Leader>F <Plug>CtrlSFVwordExec
+    nmap     <Leader>fn <Plug>CtrlSFCwordPath
+    nmap     <Leader>fp <Plug>CtrlSFPwordPath
+    nnoremap <Leader>fo :CtrlSFOpen<CR>
+    nnoremap <Leader><F3> :CtrlSFToggle<CR>
+    inoremap <Leader><F3> <Esc>:CtrlSFToggle<CR>
+endif
+" }}} dyng/ctrlsf.vim "
