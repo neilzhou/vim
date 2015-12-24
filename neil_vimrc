@@ -249,6 +249,8 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
+let mapleader=","
+
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4               " Let backspace delete indent
@@ -256,18 +258,29 @@ set splitright                  " Puts new vsplit windows to the right of the cu
 set splitbelow                  " Puts new split windows to the bottom of the current
 set nu
 
-if LINUX()
-    colorscheme evening
-endif
+set background=dark         " Assume a dark background
+" Allow to trigger background
+function! ToggleBG()
+    let s:tbg = &background
+    " Inversion
+    if s:tbg == "dark"
+        set background=light
+    else
+        set background=dark
+    endif
+endfunction
+noremap <leader>bg :call ToggleBG()<CR>
 
 set expandtab
 set showmatch
 
 set cursorline
+highlight clear SignColumn      " SignColumn should match background
+highlight clear LineNr          " Current line number row will have same background color in relative mode
+highlight clear CursorLineNr    " Remove highlight color from current line number
 "--状态行设置--
 set laststatus=2 " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
 
-let mapleader=","
  " 选中状态下 复制
 vnoremap <leader>y "+y
 nnoremap <leader>y "+yy
@@ -655,3 +668,13 @@ if isdirectory(expand("~/.vim/bundle/ctrlsf.vim"))
     inoremap <Leader><F3> <Esc>:CtrlSFToggle<CR>
 endif
 " }}} dyng/ctrlsf.vim "
+
+" vim UI scheme {{{
+if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+    let g:solarized_termcolors=256
+    let g:solarized_termtrans=1
+    let g:solarized_contrast="normal"
+    let g:solarized_visibility="normal"
+    color solarized             " Load a colorscheme
+endif
+"}}}"
