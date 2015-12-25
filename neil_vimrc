@@ -28,11 +28,18 @@ filetype off                  " required
 
  " let Vundle manage Vundle, required
 
+" In your .vimrc.before.local file
+" list only the plugin groups you will use
+if !exists('g:spf13_bundle_groups')
+    let g:spf13_bundle_groups=['general', 'writing', 'neocomplete', 'programming', 'php', 'ruby', 'python', 'javascript', 'html', 'misc',]
+endif
+
  " The following are examples of different formats supported.
  " Keep Plugin commands between vundle#begin/end.
  " plugin on GitHub repo
 " Plugin 'tpope/vim-fugitive'
  Plugin 'VundleVim/Vundle.vim'
+ Plugin 'MarcWeber/vim-addon-mw-utils'
  Plugin 'vim-scripts/taglist.vim'
  Plugin 'scrooloose/nerdtree'
  Plugin 'scrooloose/nerdcommenter'
@@ -65,6 +72,18 @@ Plugin 'vim-scripts/sessionman.vim'
 Plugin 'tacahiroy/ctrlp-funky'
 Plugin 'eshion/vim-sftp-sync'
 Plugin 'dyng/ctrlsf.vim'
+Plugin 'flazz/vim-colorschemes'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'spf13/vim-colors'
+
+" Ruby {
+if count(g:spf13_bundle_groups, 'ruby')
+    Bundle 'tpope/vim-rails'
+    let g:rubycomplete_buffer_loading = 1
+    "let g:rubycomplete_classes_in_global = 1
+    "let g:rubycomplete_rails = 1
+endif
+" }
 
 
 "Plugin 'vim-scripts/phpfolding.vim'
@@ -258,6 +277,8 @@ set splitright                  " Puts new vsplit windows to the right of the cu
 set splitbelow                  " Puts new split windows to the bottom of the current
 set nu
 
+autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+
 set background=dark         " Assume a dark background
 " Allow to trigger background
 function! ToggleBG()
@@ -399,7 +420,7 @@ if has("cscope")
   elseif LINUX()
       "for linux:
       let g:CscopeAddString = "cs add " . g:CurrentDir . "/cscope.out " . g:CurrentDir
-      nnoremap <leader><F5> :!find . -type f -name "*.php" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
+      nnoremap <leader><F5> :!find . -type f -name "*.*" -not -name ".*" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
   endif
   
 endif
