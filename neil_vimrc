@@ -28,11 +28,18 @@ filetype off                  " required
 
  " let Vundle manage Vundle, required
 
+" In your .vimrc.before.local file
+" list only the plugin groups you will use
+if !exists('g:spf13_bundle_groups')
+    let g:spf13_bundle_groups=['general', 'writing', 'neocomplete', 'programming', 'php', 'ruby', 'python', 'javascript', 'html', 'misc',]
+endif
+
  " The following are examples of different formats supported.
  " Keep Plugin commands between vundle#begin/end.
  " plugin on GitHub repo
 " Plugin 'tpope/vim-fugitive'
  Plugin 'VundleVim/Vundle.vim'
+ Plugin 'MarcWeber/vim-addon-mw-utils'
  Plugin 'vim-scripts/taglist.vim'
  Plugin 'scrooloose/nerdtree'
  Plugin 'scrooloose/nerdcommenter'
@@ -63,6 +70,20 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'eshion/vim-sftp-sync'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'flazz/vim-colorschemes'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'spf13/vim-colors'
+
+" Ruby {
+if count(g:spf13_bundle_groups, 'ruby')
+    Bundle 'tpope/vim-rails'
+    let g:rubycomplete_buffer_loading = 1
+    "let g:rubycomplete_classes_in_global = 1
+    "let g:rubycomplete_rails = 1
+endif
+" }
 
 
 "Plugin 'vim-scripts/phpfolding.vim'
@@ -247,6 +268,8 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
+let mapleader=","
+
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4               " Let backspace delete indent
@@ -254,18 +277,31 @@ set splitright                  " Puts new vsplit windows to the right of the cu
 set splitbelow                  " Puts new split windows to the bottom of the current
 set nu
 
-if LINUX()
-    colorscheme evening
-endif
+autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+
+set background=dark         " Assume a dark background
+" Allow to trigger background
+function! ToggleBG()
+    let s:tbg = &background
+    " Inversion
+    if s:tbg == "dark"
+        set background=light
+    else
+        set background=dark
+    endif
+endfunction
+noremap <leader>bg :call ToggleBG()<CR>
 
 set expandtab
 set showmatch
 
 set cursorline
+highlight clear SignColumn      " SignColumn should match background
+highlight clear LineNr          " Current line number row will have same background color in relative mode
+highlight clear CursorLineNr    " Remove highlight color from current line number
 "--状态行设置--
 set laststatus=2 " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
 
-let mapleader=","
  " 选中状态下 复制
 vnoremap <leader>y "+y
 nnoremap <leader>y "+yy
@@ -384,7 +420,7 @@ if has("cscope")
   elseif LINUX()
       "for linux:
       let g:CscopeAddString = "cs add " . g:CurrentDir . "/cscope.out " . g:CurrentDir
-      nnoremap <leader><F5> :!find . -type f -name "*.php" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
+      nnoremap <leader><F5> :!find . -type f -name "*.*" -not -name ".*" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
   endif
   
 endif
@@ -608,3 +644,58 @@ endif
             nmap <leader>sc :SessionClose<CR>
         endif
 " }
+
+" sftp sync {
+    if isdirectory(expand("~/.vim/bundle/vim-sftp-sync"))
+        "let g:vim_sftp_configs = {
+                    "\      'sample_server_1' : {
+                    "\       'upload_on_save'   : 1,
+                    "\       'download_on_open' : 0,
+                    "\       'confirm_downloads': 1,
+                    "\       'confirm_uploads'  : 0,
+                    "\       'local_base_path'  : '/Users/name/sample/',
+                    "\       'remote_base_path' : '/var/www/sample/',
+                    "\       'sftp_command' : 'ftp',
+                    "\       'user' : 'username',
+                    "\       'pass' : 'password',
+                    "\       'host' : '127.0.0.1'
+                    "\   },
+                    "\   'sample_server_2' : {
+                    "\       'upload_on_save'   : 1,
+                    "\       'download_on_open' : 1,
+                    "\       'confirm_downloads': 0,
+                    "\       'confirm_uploads'  : 0,
+                    "\       'local_base_path'  : '/Users/development',
+                    "\       'remote_base_path' : '/var/www/development/trunk/',
+                    "\       'sftp_command' : 'sftp',
+                    "\       'complete_prompt_regexp' : '100\%',
+                    "\       'user' : 'username',
+                    "\       'pass' : 'password',
+                    "\       'host' : '-P23 user@127.0.0.1'
+                    "\   }
+                    "\}
+    endif
+" }"
+
+" dyng/ctrlsf.vim {{{ "
+if isdirectory(expand("~/.vim/bundle/ctrlsf.vim"))
+    nmap     <Leader>f <Plug>CtrlSFPrompt
+    vmap     <Leader>f <Plug>CtrlSFVwordPath
+    vmap     <Leader>F <Plug>CtrlSFVwordExec
+    nmap     <Leader>fn <Plug>CtrlSFCwordPath
+    nmap     <Leader>fp <Plug>CtrlSFPwordPath
+    nnoremap <Leader>fo :CtrlSFOpen<CR>
+    nnoremap <Leader><F3> :CtrlSFToggle<CR>
+    inoremap <Leader><F3> <Esc>:CtrlSFToggle<CR>
+endif
+" }}} dyng/ctrlsf.vim "
+
+" vim UI scheme {{{
+if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+    let g:solarized_termcolors=256
+    let g:solarized_termtrans=1
+    let g:solarized_contrast="normal"
+    let g:solarized_visibility="normal"
+    color solarized             " Load a colorscheme
+endif
+"}}}"
