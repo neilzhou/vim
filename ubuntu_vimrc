@@ -75,9 +75,15 @@ Plugin 'dyng/ctrlsf.vim'
 Plugin 'flazz/vim-colorschemes'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'spf13/vim-colors'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'vim-rubyformat'
+Plugin 'edsono/vim-matchit'
+Plugin 'kana/vim-textobj-user'
+Plugin 'nelstrom/vim-textobj-rubyblock'
 Bundle 'slim-template/vim-slim.git'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'KabbAmine/zeavim.vim'
+Plugin 'Yggdroot/indentLine'
 
 " Ruby {
 if count(g:spf13_bundle_groups, 'ruby')
@@ -739,3 +745,16 @@ if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"
     endif
 endif
 "}}}"
+
+" vim indentLine.vim {{{ "
+if isdirectory(expand("~/.vim/bundle/indentLine"))
+    "Vim
+endif
+" }}} vim indentLine.vim "
+
+" matchit.vim {{{ "
+
+if isdirectory(expand("~/.vim/bundle/vim-matchit"))
+    runtime macros/matchit.vim
+endif
+" }}} matchit.vim "
