@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright (C) 2015 YouCompleteMe Contributors
 #
 # This file is part of YouCompleteMe.
@@ -17,14 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with YouCompleteMe.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *  # noqa
+
 from nose.tools import eq_
 from ycm.test_utils import MockVimModule
 vim_mock = MockVimModule()
-import os
 
 from .. import completion_request
 
-class ConvertCompletionResponseToVimDatas_test:
+
+class ConvertCompletionResponseToVimDatas_test( object ):
   """ This class tests the
       completion_request._ConvertCompletionResponseToVimDatas method """
 
@@ -35,10 +41,10 @@ class ConvertCompletionResponseToVimDatas_test:
     try:
       eq_( expected_vim_data, vim_data )
     except:
-      print "Expected:\n'{0}'\nwhen parsing:\n'{1}'\nBut found:\n'{2}'".format(
+      print( "Expected:\n'{0}'\nwhen parsing:\n'{1}'\nBut found:\n'{2}'".format(
           expected_vim_data,
           completion_data,
-          vim_data )
+          vim_data ) )
       raise
 
 
@@ -53,12 +59,13 @@ class ConvertCompletionResponseToVimDatas_test:
         'doc_string':    'DOC STRING',
       },
     }, {
-      'word': 'INSERTION TEXT',
-      'abbr': 'MENU TEXT',
-      'menu': 'EXTRA MENU INFO',
-      'kind': 'k',
-      'info': 'DETAILED INFO' + os.linesep + 'DOC STRING',
-      'dup' : 1,
+      'word' : 'INSERTION TEXT',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'info' : 'DETAILED INFO\nDOC STRING',
+      'dup'  : 1,
+      'empty': 1,
     } )
 
 
@@ -70,12 +77,13 @@ class ConvertCompletionResponseToVimDatas_test:
       'kind':            'K',
       'detailed_info':   'DETAILED INFO',
     }, {
-      'word': 'INSERTION TEXT',
-      'abbr': 'MENU TEXT',
-      'menu': 'EXTRA MENU INFO',
-      'kind': 'k',
-      'info': 'DETAILED INFO',
-      'dup' : 1,
+      'word' : 'INSERTION TEXT',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'info' : 'DETAILED INFO',
+      'dup'  : 1,
+      'empty': 1,
     } )
 
 
@@ -89,12 +97,13 @@ class ConvertCompletionResponseToVimDatas_test:
         'doc_string':    'DOC STRING',
       },
     }, {
-      'word': 'INSERTION TEXT',
-      'abbr': 'MENU TEXT',
-      'menu': 'EXTRA MENU INFO',
-      'kind': 'k',
-      'info': 'DOC STRING',
-      'dup' : 1,
+      'word' : 'INSERTION TEXT',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'info' : 'DOC STRING',
+      'dup'  : 1,
+      'empty': 1,
     } )
 
 
@@ -107,11 +116,12 @@ class ConvertCompletionResponseToVimDatas_test:
       'extra_data': {
       },
     }, {
-      'word': 'INSERTION TEXT',
-      'abbr': 'MENU TEXT',
-      'menu': 'EXTRA MENU INFO',
-      'kind': 'k',
-      'dup' : 1,
+      'word' : 'INSERTION TEXT',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'dup'  : 1,
+      'empty': 1,
     } )
 
 
@@ -125,10 +135,52 @@ class ConvertCompletionResponseToVimDatas_test:
       'extra_data': {
       },
     }, {
-      'word': 'INSERTION TEXT',
-      'abbr': 'MENU TEXT',
-      'menu': 'EXTRA MENU INFO',
-      'kind': 'k',
-      'info': 'DETAILED INFO',
-      'dup' : 1,
+      'word' : 'INSERTION TEXT',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'info' : 'DETAILED INFO',
+      'dup'  : 1,
+      'empty': 1,
+    } )
+
+
+  def Empty_Insertion_Text_test( self ):
+    self._Check( {
+      'insertion_text':  '',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+        'doc_string':    'DOC STRING',
+      },
+    }, {
+      'word' : '',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'info' : 'DETAILED INFO\nDOC STRING',
+      'dup'  : 1,
+      'empty': 1,
+    } )
+
+
+  def No_Insertion_Text_test( self ):
+    self._Check( {
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+        'doc_string':    'DOC STRING',
+      },
+    }, {
+      'word' : '',
+      'abbr' : 'MENU TEXT',
+      'menu' : 'EXTRA MENU INFO',
+      'kind' : 'k',
+      'info' : 'DETAILED INFO\nDOC STRING',
+      'dup'  : 1,
+      'empty': 1,
     } )

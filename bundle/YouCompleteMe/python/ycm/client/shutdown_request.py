@@ -1,4 +1,4 @@
-# Copyright (C) 2013  Google Inc.
+# Copyright (C) 2016 YouCompleteMe contributors
 #
 # This file is part of YouCompleteMe.
 #
@@ -25,34 +25,30 @@ from builtins import *  # noqa
 
 from requests.exceptions import ReadTimeout
 
-from ycm.client.base_request import ( BaseRequest, BuildRequestData,
-                                      HandleServerException )
-from ycmd.responses import ServerError
+from ycm.client.base_request import BaseRequest
+
+TIMEOUT_SECONDS = 0.1
 
 
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
+class ShutdownRequest( BaseRequest ):
+  def __init__( self ):
+    super( BaseRequest, self ).__init__()
 
 
   def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
     try:
-      self._response = self.PostDataToHandler( request_data,
-                                               'semantic_completion_available' )
-    except ( ServerError, ReadTimeout ) as e:
-      HandleServerException( e )
+      self.PostDataToHandler( {},
+                              'shutdown',
+                              TIMEOUT_SECONDS )
+    except ReadTimeout:
+      pass
 
 
   def Response( self ):
     return self._response
 
 
-def SendCompleterAvailableRequest( filetypes ):
-  request = CompleterAvailableRequest( filetypes )
+def SendShutdownRequest():
+  request = ShutdownRequest()
   # This is a blocking call.
   request.Start()
-  return request.Response()
