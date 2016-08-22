@@ -75,6 +75,40 @@ Plugin 'dyng/ctrlsf.vim'
 Plugin 'flazz/vim-colorschemes'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'spf13/vim-colors'
+" PHP {
+        if count(g:spf13_bundle_groups, 'php')
+            Bundle 'spf13/PIV'
+            Bundle 'arnaud-lb/vim-php-namespace'
+            Bundle 'beyondwords/vim-twig'
+        endif
+    " }
+ " Python {
+        if count(g:spf13_bundle_groups, 'python')
+            " Pick either python-mode or pyflakes & pydoc
+            Bundle 'klen/python-mode'
+            Bundle 'yssource/python.vim'
+            Bundle 'python_match.vim'
+            Bundle 'pythoncomplete'
+        endif
+    " }
+
+    " Javascript {
+        if count(g:spf13_bundle_groups, 'javascript')
+            Bundle 'elzr/vim-json'
+            Bundle 'groenewege/vim-less'
+            Bundle 'pangloss/vim-javascript'
+            Bundle 'briancollins/vim-jst'
+            Bundle 'kchmck/vim-coffee-script'
+        endif
+    " }
+    " HTML {
+        if count(g:spf13_bundle_groups, 'html')
+            Bundle 'amirh/HTML-AutoCloseTag'
+            Bundle 'hail2u/vim-css3-syntax'
+            Bundle 'gorodinskiy/vim-coloresque'
+            Bundle 'tpope/vim-haml'
+        endif
+    " }
 
 " Ruby {
 if count(g:spf13_bundle_groups, 'ruby')
@@ -199,6 +233,23 @@ set iskeyword-=-                    " '-' is an end of word designator
 set mouse=a                 " Automatically enable mouse usage
 set mousehide               " Hide the mouse cursor while typing
 scriptencoding utf-8
+
+
+autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+"autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
+autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+" preceding line best in a plugin but here for now.
+
+autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+
+" Workaround vim-commentary for Haskell
+autocmd FileType haskell setlocal commentstring=--\ %s
+" Workaround broken colour highlighting in Haskell
+autocmd FileType haskell,rust setlocal nospell
+" Wrapped lines goes down/up to next row, rather than next line in file.
+    noremap j gj
+    noremap k gk
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
@@ -553,15 +604,15 @@ if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
     "precedure of default root markers like '.git', '.svn' and so on
     let g:ctrlp_root_markers=['tags']
     
-    "if WINDOWS()
+    if WINDOWS()
         ""Windows
-        "set wildignore+='*\\tmp\*,*.swp,*.zip,*.exe' 
+        set wildignore+='*\\tmp\*,*.swp,*.zip,*.exe' 
         "let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d' "Windows
-    "else
+    else
         ""Linux/Mac
-        "set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+        set wildignore+=*/tmp/*,*.so,*.swp,*.zip,tags,cscope.*,.git/*
         "let g:ctrlp_user_command = 'find %s -type f' " Linux/MAC
-    "endif
+    endif
 
     "let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     "let g:ctrlp_custom_ignore = {'dir': '\v[\/]\.(git|hg|svn)$','file': '\v\.(exe|so|dll)$',}
@@ -702,3 +753,59 @@ if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"
     color solarized             " Load a colorscheme
 endif
 "}}}"
+
+" YouCompleteMe {
+        if count(g:spf13_bundle_groups, 'youcompleteme')
+            let g:acp_enableAtStartup = 0
+
+            " enable completion from tags
+            let g:ycm_collect_identifiers_from_tags_files = 1
+
+            " Enable omni completion.
+            autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+            autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+            autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+            autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+            autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+            autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+            " Haskell post write lint and check with ghcmod
+            " $ `cabal install ghcmod` if missing and ensure
+            " ~/.cabal/bin is in your $PATH.
+            if !executable("ghcmod")
+                autocmd BufWritePost *.hs GhcModCheckAndLintAsync
+            endif
+
+            " For snippet_complete marker.
+            if !exists("g:spf13_no_conceal")
+                if has('conceal')
+                    set conceallevel=2 concealcursor=i
+                endif
+            endif
+
+            " Disable the neosnippet preview candidate window
+            " When enabled, there can be too much visual noise
+            " especially when splits are used.
+            set completeopt-=preview
+        endif
+    " }
+" PyMode {
+        " Disable if python support not present
+        if !has('python')
+            let g:pymode = 0
+        endif
+
+        if isdirectory(expand("~/.vim/bundle/python-mode"))
+            let g:pymode_lint_checkers = ['pyflakes']
+            let g:pymode_trim_whitespaces = 0
+            let g:pymode_options = 0
+            let g:pymode_rope = 0
+        endif
+    " }
+" PIV {
+        if isdirectory(expand("~/.vim/bundle/PIV"))
+            let g:DisableAutoPHPFolding = 0
+            let g:PIVAutoClose = 0
+        endif
+    " }
