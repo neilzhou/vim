@@ -235,7 +235,7 @@ set mousehide               " Hide the mouse cursor while typing
 scriptencoding utf-8
 
 
-autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+"autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
 "autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
 autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
@@ -474,7 +474,7 @@ if has("cscope")
       "for linux:
       let g:CscopeAddString = "cs add " . g:CurrentDir . "/cscope.out " . g:CurrentDir
       "nnoremap <leader><F5> :!find . -type f -name "*.*" -not -name ".*" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
-      nnoremap <leader><F5> :!find . -type f -name "*.php" -o -name "*.inc" -not -name ".*" > cscope.files<CR>:!ctags -L cscope.files<CR>:!cscope -b<CR>:cs kill -1<CR>:exe CscopeAddString<CR><CR>
+      nnoremap <leader><F5> :!find . -type f -name "*.php" -o -name "*.inc" -not -name ".*" > cscope.files<CR>:!ctags -L cscope.files<CR><CR>
   endif
   
 endif
@@ -602,7 +602,7 @@ if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
     let g:ctrlp_working_path_mode='ra'
     "set nearest ancestor that contains custom markers eg. tags. which will be
     "precedure of default root markers like '.git', '.svn' and so on
-    let g:ctrlp_root_markers=['tags']
+    let g:ctrlp_root_markers=['.git','.svn','tags']
     
     if WINDOWS()
         ""Windows
