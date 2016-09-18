@@ -231,10 +231,18 @@ set virtualedit=onemore             " Allow for cursor beyond last character
 set iskeyword-=.                    " '.' is an end of word designator
 set iskeyword-=#                    " '#' is an end of word designator
 set iskeyword-=-                    " '-' is an end of word designator
+set iskeyword-=58                   " ':' is an end of word designator
+
+" add $ for php to as word
+autocmd BufRead,BufNewFile *.php setlocal iskeyword+=$
+autocmd BufRead,BufNewFile *.php setlocal iskeyword-=-
+autocmd BufRead,BufNewFile *.php setlocal iskeyword-=58
+autocmd BufRead,BufNewFile *.php setlocal iskeyword-=#
+autocmd BufRead,BufNewFile *.php setlocal iskeyword-=.
+
 set mouse=a                 " Automatically enable mouse usage
 set mousehide               " Hide the mouse cursor while typing
 scriptencoding utf-8
-
 
 "autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
 "autocmd FileType go autocmd BufWritePre <buffer> Fmt
@@ -417,7 +425,7 @@ if isdirectory(expand("~/.vim/bundle/nerdtree"))
     "automatical open NERDTree when only vim with no file
     ""autocmd StdinReadPre * let s:std_in=1
     ""autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-    map <F2> :NERDTreeToggle<CR>
+    map <leader><F2> :NERDTreeToggle<CR>
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 endif
 
@@ -545,7 +553,7 @@ endif
 "Settings for tagbar"
 if isdirectory(expand("~/.vim/bundle/tagbar"))
     let g:tagbar_autofocus = 1
-    nnoremap <F3> :TagbarToggle<CR>
+    nnoremap <leader><F3> :TagbarToggle<CR>
 endif
 
 "Settings for tasklist
@@ -740,8 +748,8 @@ if isdirectory(expand("~/.vim/bundle/ctrlsf.vim"))
     nmap     <Leader>fn <Plug>CtrlSFCwordPath
     nmap     <Leader>fp <Plug>CtrlSFPwordPath
     nnoremap <Leader>fo :CtrlSFOpen<CR>
-    nnoremap <Leader><F3> :CtrlSFToggle<CR>
-    inoremap <Leader><F3> <Esc>:CtrlSFToggle<CR>
+    nnoremap <Leader><F4> :CtrlSFToggle<CR>
+    inoremap <Leader><F4> <Esc>:CtrlSFToggle<CR>
 endif
 " }}} dyng/ctrlsf.vim "
 
@@ -806,8 +814,9 @@ endif
     " }
 " PIV {
         if isdirectory(expand("~/.vim/bundle/PIV"))
-            let g:DisableAutoPHPFolding = 0
+            "let g:DisableAutoPHPFolding = 0
             let g:PIVAutoClose = 0
+            let g:DisableAutoPHPFolding = 1
         endif
     " }
 
@@ -828,3 +837,4 @@ endif
     \    "marker_closed_tree" : '▸',
     \    "marker_open_tree" : '▾'
     \}
+
