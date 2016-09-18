@@ -240,8 +240,18 @@ autocmd BufRead,BufNewFile *.php setlocal iskeyword-=58
 autocmd BufRead,BufNewFile *.php setlocal iskeyword-=#
 autocmd BufRead,BufNewFile *.php setlocal iskeyword-=.
 
+set nofoldenable    " disable folding
+
+" Send more characters for redraws
+set ttyfast
+
 set mouse=a                 " Automatically enable mouse usage
 set mousehide               " Hide the mouse cursor while typing
+
+" Set this to the name of your terminal that supports mouse codes.
+" Must be one of: xterm, xterm2, netterm, dec, jsbterm, pterm
+set ttymouse=xterm2
+
 scriptencoding utf-8
 
 "autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
