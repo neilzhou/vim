@@ -110,6 +110,9 @@ Plugin 'joonty/vdebug'
             Bundle 'tpope/vim-haml'
         endif
     " }
+" Vim Js beautiful {
+    Bundle 'maksimr/vim-jsbeautify'
+" }
 
 " Ruby {
 if count(g:spf13_bundle_groups, 'ruby')
@@ -375,12 +378,20 @@ highlight clear CursorLineNr    " Remove highlight color from current line numbe
 set laststatus=2 " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
 
  " 选中状态下 复制
-vnoremap <leader>y "+y
-nnoremap <leader>y "+yy
-"设置快捷键将系统剪贴板内容粘贴至Vim
-nnoremap <Leader>p "+p
-"共享剪贴板  
-set clipboard+=unnamed 
+if OSX()
+    " if clipboard is enabled in vim
+    set clipboard+=unnamed 
+    " or 
+    " vmap "+y :w !pbcopy<CR><CR>
+    " nmap "+p :r !pbpaste<CR><CR>
+else
+    vnoremap <leader>y "+y
+    nnoremap <leader>y "+yy
+    "设置快捷键将系统剪贴板内容粘贴至Vim
+    nnoremap <leader>p "+p
+    "共享剪贴板  
+    set clipboard+=unnamed 
+endif
 "自动补全
 :inoremap ( ()<ESC>i
 :inoremap ) <c-r>=ClosePair(')')<CR>
@@ -850,3 +861,27 @@ endif
     \    "marker_open_tree" : '▾'
     \}
 
+" JS beautiful {
+if isdirectory(expand("~/.vim/bundle/vim-jsbeautify"))
+    ".vimrc
+    map <leader>jb :call JsBeautify()<cr>
+    " or
+    autocmd FileType javascript noremap <buffer>  <leader>jb :call JsBeautify()<cr>
+    " for json
+    autocmd FileType json noremap <buffer> <leader>jb :call JsonBeautify()<cr>
+    " for jsx
+    autocmd FileType jsx noremap <buffer> <leader>jb :call JsxBeautify()<cr>
+    " for html
+    autocmd FileType html noremap <buffer> <leader>jb :call HtmlBeautify()<cr>
+    " for css or scss
+    autocmd FileType css noremap <buffer> <leader>jb :call CSSBeautify()<cr>
+
+    ".vimrc for range
+    map <leader>jr :call RangeJsBeautify()<cr>
+    autocmd FileType javascript vnoremap <buffer>  <leader>jr :call RangeJsBeautify()<cr>
+    autocmd FileType json vnoremap <buffer> <leader>jr :call RangeJsonBeautify()<cr>
+    autocmd FileType jsx vnoremap <buffer> <leader>jr :call RangeJsxBeautify()<cr>
+    autocmd FileType html vnoremap <buffer> <leader>jr :call RangeHtmlBeautify()<cr>
+    autocmd FileType css vnoremap <buffer> <leader>jr :call RangeCSSBeautify()<cr>
+endif
+" }
