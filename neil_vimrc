@@ -419,6 +419,7 @@ function! RenameFile()
     endif
 endfunction
 map <leader>n :call RenameFile()<cr>
+map <leader>jx :%!xxd<CR>
 
 " normal mode下按Alt+Right（右箭头）展示下一个tab
 :nnoremap <A-Right> :tabn<CR>
@@ -847,7 +848,7 @@ endif
     let g:vdebug_options= {
     \    "port" : 9000,
     \    "server" : '',
-    \    "timeout" : 20,
+    \    "timeout" : 40,
     \    "on_close" : 'detach',
     \    "break_on_open" : 0,
     \    "ide_key" : '',
@@ -860,6 +861,9 @@ endif
     \    "marker_closed_tree" : '▸',
     \    "marker_open_tree" : '▾'
     \}
+" debug for remote server
+"let g:vdebug_options['path_maps'] = {"/apache/dev/htdocs/web_pa/pa/ALS": "/Users/neilzhou/Documents/Projects/activehuntfish/ALS_WEB_PA/branches/pahf_r1.03.77/ALS", "/apache/dev/htdocs/web_pa/util":"/Users/neilzhou/Documents/Projects/activehuntfish/UTIL_WEB/branches/pahf_r1.03.77/util", "/apache/dev/htdocs/web_pa/libs":"/Users/neilzhou/Documents/Projects/activehuntfish/LIBS_WEB/branches/pahf_r1.03.77/libs", "/apache/dev/htdocs/web_pa/pa":"/Users/neilzhou/Documents/Projects/activehuntfish/LIBS_WEB/branches/pahf_r1.03.77/libs"}
+
 
 " JS beautiful {
 if isdirectory(expand("~/.vim/bundle/vim-jsbeautify"))
